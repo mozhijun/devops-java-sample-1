@@ -86,7 +86,9 @@ pipeline {
         }
         stage('push with tag'){
           when{
-            branch 'master'
+            expression{
+              return params.TAG_NAME =~ /v.*/
+            }
           }
           steps {
               container ('maven') {
@@ -104,7 +106,9 @@ pipeline {
         }
         stage('deploy to production') {
           when{
-            branch 'master'
+            expression{
+              return params.TAG_NAME =~ /v.*/
+            }
           }
           steps {
             input(id: 'deploy-to-production', message: 'deploy to production?')
